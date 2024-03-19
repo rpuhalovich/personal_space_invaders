@@ -1,0 +1,15 @@
+# from: https://clang.llvm.org/docs/ClangFormatStyleOptions.html
+
+Language: Cpp
+BasedOnStyle: LLVM
+IndentWidth: 4
+AccessModifierOffset: -4
+IndentAccessModifiers: false
+DerivePointerAlignment: false
+PointerAlignment: Left
+ColumnLimit: 100
+KeepEmptyLinesAtTheStartOfBlocks: false
+LineEnding: LF
+ReflowComments: true
+BreakBeforeBraces: Attach
+AllowShortFunctionsOnASingleLine: None
