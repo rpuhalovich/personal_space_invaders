@@ -1,6 +1,7 @@
 #include <raylib.h>
 #include <raymath.h>
 #include <stdio.h>
+#include <math.h>
 
 #include "types.h"
 
@@ -91,10 +92,14 @@ void update() {
     i32 sf = state.window.scaleFactor;
 
     f32 m = state.ship.speed * GetFrameTime();
-    if (IsKeyDown(KEY_LEFT))
+    if (IsKeyDown(KEY_LEFT)) {
         state.ship.pos.x -= m;
-    if (IsKeyDown(KEY_RIGHT))
+        state.ship.pos.x = fmax(20.f, state.ship.pos.x);
+    }
+    if (IsKeyDown(KEY_RIGHT)) {
         state.ship.pos.x += m;
+        state.ship.pos.x = fmin(state.window.width - state.ship.texture.width * sf - 20.f, state.ship.pos.x);
+    }
 
     // draw ship
     DrawTextureEx(state.ship.texture, state.ship.pos, 0, sf, WHITE);
@@ -106,7 +111,7 @@ void update() {
             for (int c = 0; c < ALIEN_COLS; c++) {
                 Alien a = state.aliens.alienGrid[r][c];
                 Vector2 newpos = {(a.texture.width + spacing) * c * sf, (a.texture.height + spacing) * r * sf};
-                newpos.y += offset;
+                newpos.y += offset * 3;
                 newpos.x += offset;
                 a.pos = newpos;
                 DrawTextureEx(a.texture, a.pos, 0, sf, WHITE);
