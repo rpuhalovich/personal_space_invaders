@@ -17,6 +17,15 @@ typedef struct {
 } Alien;
 
 typedef struct {
+    Vector2 start;
+    Vector2 end;
+    f32 speed;
+    f32 height;
+    f32 width;
+    bool isFired;
+} Bullet;
+
+typedef struct {
     i32 time;
     i32 score;
     struct {
@@ -31,6 +40,7 @@ typedef struct {
     struct {
         Texture texture;
         Vector2 pos;
+        Bullet bullet;
         f32 speed;
         f32 leftBoundry;
         f32 rightBoundry;

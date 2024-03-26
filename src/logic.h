@@ -17,9 +17,11 @@ f32 clampf(f32 val, f32 mn, f32 mx);
  */
 void calcShipPosition(State* s, f32 frameTime, bool isLeft, f32 minPos, f32 maxPos);
 
+void tick(State* state, f32 frameTime);
+
 /**
- * mutates the alien positions in memory
+ * can only have one bullet at a time
  */
-void calcAliensPositions(State* state, f32 frameTime);
+void shoot(State* s);
 
 #endif // LOGIC_H

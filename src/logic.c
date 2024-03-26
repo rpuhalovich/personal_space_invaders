@@ -1,6 +1,8 @@
 #include <stdio.h>
 
 #include "logic.h"
+#include "game.h"
+#include "raylib.h"
 
 void printv2(Vector2 v) {
     printf("x: %f, y: %f\n", v.x, v.y);
@@ -23,36 +25,70 @@ void calcShipPosition(State* s, f32 frameTime, bool isLeft, f32 minPos, f32 maxP
     s->ship.pos =resPos;
 }
 
-void calcAliensPositions(State* state, f32 frameTime) {
-    i32 dir = state->aliens.isLeft ? -1 : 1;
-    f32 offset = dir * abs(state->aliens.speed) * GetFrameTime();
-    for (int r = 0; r < ALIEN_ROWS; r++) {
-        for (int c = 0; c < ALIEN_COLS; c++) {
-            state->aliens.alienGrid[r][c].pos.x += offset;
-        }
-    }
+void tick(State* state, f32 frameTime) {
+    // bullet
+    {
+        if (state->ship.bullet.start.y <= 0.f) state->ship.bullet.isFired = false;
+        f32 m = state->ship.bullet.speed * frameTime;
+        state->ship.bullet.start.y -= m;
+        state->ship.bullet.end.y -= m;
 
-    bool moveDown = false;
-    for (int r = 0; r < ALIEN_ROWS; r++) {
-        for (int c = 0; c < ALIEN_COLS; c++) {
-            Vector2 pos = state->aliens.alienGrid[r][c].pos;
-            f32 textureWidth = state->aliens.alienGrid[r][c].texture.width;
-            if (pos.x < state->window.leftMargin || (pos.x + textureWidth) > state->window.rightMargin) {
-                state->aliens.isLeft = !state->aliens.isLeft;
-                moveDown = true;
-            }
-        }
-    }
-
-    if (moveDown) {
         for (int r = 0; r < ALIEN_ROWS; r++) {
             for (int c = 0; c < ALIEN_COLS; c++) {
-                state->aliens.alienGrid[r][c].pos.y += state->aliens.alienGrid[r][c].texture.height;
-                f32 x = state->aliens.alienGrid[r][c].pos.x;
-                f32 lmargin = state->window.leftMargin + 1.f;
-                f32 rmargin = state->window.rightMargin - 1.f;
-                state->aliens.alienGrid[r][c].pos.x = clampf(x, lmargin, rmargin);
+                Alien a = state->aliens.alienGrid[r][c];
+                if (a.isDed) continue;
+                Rectangle rec = { .x = a.pos.x, .y = a.pos.y, .width = a.texture.width, .height = a.texture.height };
+                if (CheckCollisionPointRec(state->ship.bullet.start, rec) && state->ship.bullet.isFired) {
+                    state->aliens.alienGrid[r][c].isDed = true;
+                    state->ship.bullet.isFired = false;
+                }
             }
         }
     }
+
+    // aliens
+    {
+        i32 dir = state->aliens.isLeft ? -1 : 1;
+        f32 offset = dir * abs(state->aliens.speed) * GetFrameTime();
+        for (int r = 0; r < ALIEN_ROWS; r++) {
+            for (int c = 0; c < ALIEN_COLS; c++) {
+                state->aliens.alienGrid[r][c].pos.x += offset;
+            }
+        }
+
+        bool moveDown = false;
+        for (int r = 0; r < ALIEN_ROWS; r++) {
+            for (int c = 0; c < ALIEN_COLS; c++) {
+                Vector2 pos = state->aliens.alienGrid[r][c].pos;
+                f32 textureWidth = state->aliens.alienGrid[r][c].texture.width;
+                if (pos.x < state->window.leftMargin || (pos.x + textureWidth) > state->window.rightMargin) {
+                    state->aliens.isLeft = !state->aliens.isLeft;
+                    moveDown = true;
+                }
+            }
+        }
+
+        if (moveDown) {
+            for (int r = 0; r < ALIEN_ROWS; r++) {
+                for (int c = 0; c < ALIEN_COLS; c++) {
+                    state->aliens.alienGrid[r][c].pos.y += state->aliens.alienGrid[r][c].texture.height;
+                    f32 x = state->aliens.alienGrid[r][c].pos.x;
+                    f32 lmargin = state->window.leftMargin + 1.f;
+                    f32 rmargin = state->window.rightMargin - 1.f;
+                    state->aliens.alienGrid[r][c].pos.x = clampf(x, lmargin, rmargin);
+                }
+            }
+        }
+    }
+}
+
+void shoot(State* s) {
+    if (s->ship.bullet.isFired) return;
+    Vector2 pos = {s->ship.pos.x + (f32)s->ship.texture.width / 2, s->ship.pos.y};
+    s->ship.bullet.end = pos;
+
+    s->ship.bullet.start = pos;
+    s->ship.bullet.start.y -= s->ship.bullet.height;
+
+    s->ship.bullet.isFired = true;
 }
