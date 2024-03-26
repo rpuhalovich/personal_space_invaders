@@ -10,7 +10,7 @@ f32 clampf(f32 val, f32 mn, f32 mx) {
     return fmax(mn, fmin(val, mx));
 }
 
-Vector2 calcShipPosition(State* s, f32 frameTime, bool isLeft, f32 minPos, f32 maxPos) {
+void calcShipPosition(State* s, f32 frameTime, bool isLeft, f32 minPos, f32 maxPos) {
     f32 m = s->ship.speed * frameTime;
     Vector2 resPos = s->ship.pos;
     if (isLeft) {
@@ -20,7 +20,7 @@ Vector2 calcShipPosition(State* s, f32 frameTime, bool isLeft, f32 minPos, f32 m
         resPos.x += m;
         resPos.x = fminf(maxPos, resPos.x);
     }
-    return resPos;
+    s->ship.pos =resPos;
 }
 
 void calcAliensPositions(State* state, f32 frameTime) {

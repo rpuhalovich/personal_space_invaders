@@ -1,15 +1,12 @@
-#include <stdlib.h>
-
 #include "game.h"
 #include "logic.h"
-#include "raylib.h"
-#include "raymath.h"
 
 State state = {0};
 
 void init(void) {
     State s = {
         .time = 0,
+        .score = 0,
 
         .window.margin = 10.f,
         .window.width = 224,
@@ -78,6 +75,12 @@ void update(void) {
     // render
     {
         ClearBackground(BLACK);
+
+        // draw score
+        char score[100];
+        snprintf(score, sizeof(score), "Score: %d", state.score);
+        f32 textWidth = MeasureText(score, 5 * state.window.scaleFactor);
+        DrawText(score, (state.window.width * state.window.scaleFactor / 2 - textWidth / 2), 5, 5 * state.window.scaleFactor, WHITE);
 
         // draw ship
         DrawTextureEx(state.ship.texture, Vector2Scale(state.ship.pos, state.window.scaleFactor), 0, state.window.scaleFactor, WHITE);

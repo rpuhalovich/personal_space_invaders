@@ -18,6 +18,7 @@ typedef struct {
 
 typedef struct {
     i32 time;
+    i32 score;
     struct {
         f32 margin;
         f32 leftMargin;
