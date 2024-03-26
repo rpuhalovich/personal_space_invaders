@@ -13,12 +13,15 @@
 typedef struct {
     Texture texture;
     Vector2 pos;
+    bool isDed;
 } Alien;
 
 typedef struct {
     i32 time;
     struct {
-        f32 leftRightMargin;
+        f32 margin;
+        f32 leftMargin;
+        f32 rightMargin;
         f32 width;
         f32 height;
         f32 scaleFactor;
@@ -33,8 +36,11 @@ typedef struct {
     } ship;
     struct {
         Alien alienGrid[ALIEN_ROWS][ALIEN_COLS];
+        i32 alienRows;
+        i32 alienCols;
+        f32 spacing;
         i32 speed;
-        f32 alienOffset;
+        f32 offset;
         bool isLeft;
         f32 yOffset;
     } aliens;
