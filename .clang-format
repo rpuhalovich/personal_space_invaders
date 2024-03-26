@@ -7,9 +7,11 @@ AccessModifierOffset: -4
 IndentAccessModifiers: false
 DerivePointerAlignment: false
 PointerAlignment: Left
-ColumnLimit: 80
+ColumnLimit: 140
 KeepEmptyLinesAtTheStartOfBlocks: false
 LineEnding: LF
 ReflowComments: true
 BreakBeforeBraces: Attach
 AllowShortFunctionsOnASingleLine: None
+BinPackArguments: false
+BinPackParameters: false
