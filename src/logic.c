@@ -41,6 +41,7 @@ void tick(State* state, f32 frameTime) {
                 if (CheckCollisionPointRec(state->ship.bullet.start, rec) && state->ship.bullet.isFired) {
                     state->aliens.alienGrid[r][c].isDed = true;
                     state->ship.bullet.isFired = false;
+                    state->score += state->aliens.killScore;
                 }
             }
         }

@@ -30,6 +30,7 @@ void init(void) {
         .aliens.spacing = 5.f,
         .aliens.speed = 20.f,
         .aliens.isLeft = false,
+        .aliens.killScore = 100,
     };
 
     s.window.leftMargin = s.window.margin;

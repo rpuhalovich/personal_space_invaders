@@ -53,7 +53,7 @@ typedef struct {
         i32 speed;
         f32 offset;
         bool isLeft;
-        f32 yOffset;
+        i32 killScore;
     } aliens;
 } State;
 
