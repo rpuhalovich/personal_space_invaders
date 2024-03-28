@@ -24,7 +24,7 @@ void calcShipPosition(State* s, f32 frameTime, bool isLeft, f32 minPos, f32 maxP
     s->ship.pos =resPos;
 }
 
-void tick(State* state, f32 frameTime) {
+void tick(State* state, f32 time, f32 frameTime) {
     // bullet
     {
         if (state->ship.bullet.start.y <= 0.f) state->ship.bullet.isFired = false;

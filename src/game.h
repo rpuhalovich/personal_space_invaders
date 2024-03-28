@@ -10,6 +10,11 @@
 #define ALIEN_COLS 11
 #define SCALE_FACTOR 3
 
+typedef enum {
+    MENU = 0,
+    GAME,
+} GameMode;
+
 typedef struct {
     Texture texture;
     Vector2 pos;
@@ -26,6 +31,7 @@ typedef struct {
 } Bullet;
 
 typedef struct {
+    GameMode gameMode;
     i32 time;
     i32 score;
     struct {
@@ -48,6 +54,7 @@ typedef struct {
     } ship;
     struct {
         Alien alienGrid[ALIEN_ROWS][ALIEN_COLS];
+        Bullet bullet; // TODO: should this be an array?
         i32 alienRows;
         i32 alienCols;
         f32 spacing;
@@ -56,6 +63,8 @@ typedef struct {
         bool isLeft;
         i32 killScore;
         bool isPaused;
+        f32 lastMoveTime;
+        f32 moveInterval;
     } aliens;
 } State;
 
