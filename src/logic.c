@@ -2,7 +2,6 @@
 
 #include "logic.h"
 #include "game.h"
-#include "raylib.h"
 
 void printv2(Vector2 v) {
     printf("x: %f, y: %f\n", v.x, v.y);
@@ -48,7 +47,7 @@ void tick(State* state, f32 frameTime) {
     }
 
     // aliens
-    {
+    if (!state->aliens.isPaused) {
         i32 dir = state->aliens.isLeft ? -1 : 1;
         f32 offset = dir * abs(state->aliens.speed) * GetFrameTime();
         for (int r = 0; r < ALIEN_ROWS; r++) {
@@ -60,9 +59,9 @@ void tick(State* state, f32 frameTime) {
         bool moveDown = false;
         for (int r = 0; r < ALIEN_ROWS; r++) {
             for (int c = 0; c < ALIEN_COLS; c++) {
-                Vector2 pos = state->aliens.alienGrid[r][c].pos;
+                Alien a = state->aliens.alienGrid[r][c];
                 f32 textureWidth = state->aliens.alienGrid[r][c].texture.width;
-                if (pos.x < state->window.leftMargin || (pos.x + textureWidth) > state->window.rightMargin) {
+                if (a.pos.x < state->window.leftMargin || (a.pos.x + textureWidth) > state->window.rightMargin && !a.isDed) {
                     state->aliens.isLeft = !state->aliens.isLeft;
                     moveDown = true;
                 }

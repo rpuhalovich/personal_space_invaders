@@ -32,15 +32,18 @@ typedef struct {
         f32 margin;
         f32 leftMargin;
         f32 rightMargin;
+        f32 deathFloor;
         f32 width;
         f32 height;
         f32 scaleFactor;
+        f32 fontSize;
         i32 targetFps;
     } window;
     struct {
         Texture texture;
         Vector2 pos;
         Bullet bullet;
+        i32 lives;
         f32 speed;
         f32 leftBoundry;
         f32 rightBoundry;
@@ -54,6 +57,7 @@ typedef struct {
         f32 offset;
         bool isLeft;
         i32 killScore;
+        bool isPaused;
     } aliens;
 } State;
 

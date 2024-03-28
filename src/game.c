@@ -7,30 +7,33 @@ State state = {0};
 
 void init(void) {
     State s = {
-        .time = 0,
         .score = 0,
+        .time = 0,
 
-        .window.margin = 10.f,
-        .window.width = 224,
+        .window.fontSize = 10.f,
         .window.height = 256,
+        .window.margin = 5.f,
         .window.scaleFactor = SCALE_FACTOR,
         .window.targetFps = 60,
+        .window.width = 224,
 
         .ship.speed = 100.f,
-        .ship.bullet.start = {0},
+        .ship.lives = 3,
         .ship.bullet.end = {0},
-        .ship.bullet.speed = 300.f,
         .ship.bullet.height = 10.f,
-        .ship.bullet.width = 1.f,
         .ship.bullet.isFired = false,
+        .ship.bullet.speed = 300.f,
+        .ship.bullet.start = {0},
+        .ship.bullet.width = 1.f,
 
-        .aliens.alienRows = ALIEN_ROWS,
         .aliens.alienCols = ALIEN_COLS,
         .aliens.alienGrid = {0},
+        .aliens.alienRows = ALIEN_ROWS,
+        .aliens.isLeft = false,
+        .aliens.isPaused = false,
+        .aliens.killScore = 100,
         .aliens.spacing = 5.f,
         .aliens.speed = 20.f,
-        .aliens.isLeft = false,
-        .aliens.killScore = 100,
     };
 
     s.window.leftMargin = s.window.margin;
@@ -47,6 +50,7 @@ void init(void) {
         UnloadImage(img);
         Vector2 pos = {state.window.margin, state.window.height - (state.ship.texture.height + state.window.margin)};
         state.ship.pos = pos;
+        s.window.deathFloor = pos.y + 10.f;
     }
 
     // aliens
@@ -59,7 +63,7 @@ void init(void) {
             for (int c = 0; c < ALIEN_COLS; c++) {
                 Vector2 pos = {(state.aliens.spacing + texture.width) * c, (state.aliens.spacing + texture.height) * r};
                 pos.x += state.window.margin;
-                pos.y += state.window.margin;
+                pos.y += state.window.margin + 10.f;
                 Alien a = {texture, pos};
                 state.aliens.alienGrid[r][c] = a;
             }
@@ -75,6 +79,9 @@ void update(void) {
         if (IsKeyDown(KEY_LEFT)) calcShipPosition(&state, GetFrameTime(), true, minShipPos, maxShipPos);
         if (IsKeyDown(KEY_RIGHT)) calcShipPosition(&state, GetFrameTime(), false, minShipPos, maxShipPos);
         if (IsKeyPressed(KEY_SPACE)) shoot(&state);
+#ifdef PSI_DEBUG
+        if (IsKeyPressed(KEY_P)) state.aliens.isPaused = !state.aliens.isPaused;
+#endif
     }
 
     // logic that updates state
@@ -87,8 +94,9 @@ void update(void) {
         // draw score
         char score[16];
         snprintf(score, sizeof(score), "%d", state.score);
-        f32 textWidth = MeasureText(score, 5 * state.window.scaleFactor);
-        DrawText(score, (state.window.width * state.window.scaleFactor / 2 - textWidth / 2), 5, 5 * state.window.scaleFactor, WHITE);
+        f32 fontSize = state.window.fontSize;
+        f32 textWidth = MeasureText(score, fontSize * state.window.scaleFactor);
+        DrawText(score, (state.window.width * state.window.scaleFactor / 2 - textWidth / 2), 5, fontSize * state.window.scaleFactor, WHITE);
 
         // draw ship
         DrawTextureEx(state.ship.texture, Vector2Scale(state.ship.pos, state.window.scaleFactor), 0, state.window.scaleFactor, WHITE);
