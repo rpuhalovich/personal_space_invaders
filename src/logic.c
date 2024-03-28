@@ -56,12 +56,15 @@ void tick(State* state, f32 frameTime) {
             }
         }
 
+        f32 lmargin = state->window.margin;
+        f32 rmargin = state->window.width - state->window.margin;
+
         bool moveDown = false;
         for (int r = 0; r < ALIEN_ROWS; r++) {
             for (int c = 0; c < ALIEN_COLS; c++) {
                 Alien a = state->aliens.alienGrid[r][c];
                 f32 textureWidth = state->aliens.alienGrid[r][c].texture.width;
-                if (a.pos.x < state->window.leftMargin || (a.pos.x + textureWidth) > state->window.rightMargin && !a.isDed) {
+                if (a.pos.x < lmargin || (a.pos.x + textureWidth) > rmargin && !a.isDed) {
                     state->aliens.isLeft = !state->aliens.isLeft;
                     moveDown = true;
                 }
@@ -73,9 +76,7 @@ void tick(State* state, f32 frameTime) {
                 for (int c = 0; c < ALIEN_COLS; c++) {
                     state->aliens.alienGrid[r][c].pos.y += state->aliens.alienGrid[r][c].texture.height;
                     f32 x = state->aliens.alienGrid[r][c].pos.x;
-                    f32 lmargin = state->window.leftMargin + 1.f;
-                    f32 rmargin = state->window.rightMargin - 1.f;
-                    state->aliens.alienGrid[r][c].pos.x = clampf(x, lmargin, rmargin);
+                    state->aliens.alienGrid[r][c].pos.x = clampf(x, lmargin + 1.f, rmargin - 1.f);
                 }
             }
         }
@@ -86,9 +87,7 @@ void shoot(State* s) {
     if (s->ship.bullet.isFired) return;
     Vector2 pos = {s->ship.pos.x + (f32)s->ship.texture.width / 2, s->ship.pos.y};
     s->ship.bullet.end = pos;
-
     s->ship.bullet.start = pos;
     s->ship.bullet.start.y -= s->ship.bullet.height;
-
     s->ship.bullet.isFired = true;
 }

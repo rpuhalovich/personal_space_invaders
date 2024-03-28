@@ -36,8 +36,6 @@ void init(void) {
         .aliens.speed = 20.f,
     };
 
-    s.window.leftMargin = s.window.margin;
-    s.window.rightMargin = s.window.width - (s.ship.texture.width + s.window.margin);
     state = s;
 
     InitWindow(s.window.width * SCALE_FACTOR, s.window.height * SCALE_FACTOR, "Personal Space Invaders");
@@ -95,8 +93,15 @@ void update(void) {
         char score[16];
         snprintf(score, sizeof(score), "%d", state.score);
         f32 fontSize = state.window.fontSize;
-        f32 textWidth = MeasureText(score, fontSize * state.window.scaleFactor);
-        DrawText(score, (state.window.width * state.window.scaleFactor / 2 - textWidth / 2), 5, fontSize * state.window.scaleFactor, WHITE);
+        f32 textWidth = MeasureText(score, fontSize);
+        f32 textXpos = (state.window.width - state.window.margin - textWidth) * state.window.scaleFactor;
+
+        // printf("state.window.width: %f\n", state.window.width);
+        // printf("state.window.rightMargin: %f\n", state.window.rightMargin);
+        // printf("textWidth: %f\n", textWidth);
+        // printf("\n");
+
+        DrawText(score, textXpos, 5, fontSize * state.window.scaleFactor, WHITE);
 
         // draw ship
         DrawTextureEx(state.ship.texture, Vector2Scale(state.ship.pos, state.window.scaleFactor), 0, state.window.scaleFactor, WHITE);

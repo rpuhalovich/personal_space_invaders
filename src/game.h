@@ -30,8 +30,6 @@ typedef struct {
     i32 score;
     struct {
         f32 margin;
-        f32 leftMargin;
-        f32 rightMargin;
         f32 deathFloor;
         f32 width;
         f32 height;
