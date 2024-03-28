@@ -11,6 +11,7 @@ set(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} -DPSI_RELEASE")
 # --- src ---
 set(LIB_DIR "${CMAKE_SOURCE_DIR}/lib")
 set(SRC_DIR "${CMAKE_SOURCE_DIR}/src")
+set(RES_DIR "${CMAKE_SOURCE_DIR}/res")
 file(GLOB_RECURSE src ${SRC_DIR}/*.c ${SRC_DIR}/*.h)
 source_group(TREE ${CMAKE_SOURCE_DIR} FILES ${src})
 

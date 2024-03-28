@@ -13,5 +13,5 @@ format:
 clean:
 	rm -rf build compile_commands.json
 
-.PHONY: build format clean
+.PHONY: build build-release format clean
 .SILENT:

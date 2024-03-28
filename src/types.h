@@ -5,6 +5,7 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include <stdint.h>
+#include <string.h>
 
 #define i16 int16_t
 #define i32 int32_t

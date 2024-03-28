@@ -11,11 +11,11 @@ void init(void) {
         .time = 0,
 
         .window.fontSize = 10.f,
+        .window.width = 224,
         .window.height = 256,
         .window.margin = 5.f,
         .window.scaleFactor = SCALE_FACTOR,
         .window.targetFps = 60,
-        .window.width = 224,
 
         .ship.speed = 100.f,
         .ship.lives = 3,
@@ -45,7 +45,7 @@ void init(void) {
 
     // ship
     {
-        Image img = LoadImage("./res/ship.png");
+        Image img = LoadImage(RES_DIR "ship.png");
         state.ship.texture = LoadTextureFromImage(img);
         UnloadImage(img);
         Vector2 pos = {state.window.margin, state.window.height - (state.ship.texture.height + state.window.margin)};
@@ -55,7 +55,7 @@ void init(void) {
 
     // aliens
     {
-        Image img = LoadImage("./res/alien.png");
+        Image img = LoadImage(RES_DIR "alien.png");
         Texture texture = LoadTextureFromImage(img);
         UnloadImage(img);
 
@@ -80,7 +80,7 @@ void update(void) {
         if (IsKeyDown(KEY_RIGHT)) calcShipPosition(&state, GetFrameTime(), false, minShipPos, maxShipPos);
         if (IsKeyPressed(KEY_SPACE)) shoot(&state);
 #ifdef PSI_DEBUG
-        if (IsKeyPressed(KEY_P)) state.aliens.isPaused = !state.aliens.isPaused;
+        if (IsKeyPressed(KEY_R)) state.aliens.isPaused = !state.aliens.isPaused;
 #endif
     }
 
