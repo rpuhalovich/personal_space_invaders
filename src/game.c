@@ -80,7 +80,7 @@ void update(void) {
         if (IsKeyDown(KEY_LEFT) || IsKeyDown(KEY_A)) calcShipPosition(&state, GetFrameTime(), true, minShipPos, maxShipPos);
         if (IsKeyDown(KEY_RIGHT) || IsKeyDown(KEY_D)) calcShipPosition(&state, GetFrameTime(), false, minShipPos, maxShipPos);
         if (IsKeyPressed(KEY_SPACE) || IsKeyPressed(KEY_X)) shoot(&state);
-#ifndef PIA_DEBUG
+#ifdef PSI_DEBUG
         if (IsKeyPressed(KEY_P)) state.aliens.isPaused = !state.aliens.isPaused;
         if (IsKeyPressed(KEY_M)) state.gameMode = state.gameMode == GAME ? MENU : GAME;
 #endif

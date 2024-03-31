@@ -8,6 +8,7 @@
 
 #define ALIEN_ROWS 5
 #define ALIEN_COLS 11
+#define MAX_BULLETS 3
 #define SCALE_FACTOR 3
 
 typedef enum {
@@ -54,7 +55,7 @@ typedef struct {
     } ship;
     struct {
         Alien alienGrid[ALIEN_ROWS][ALIEN_COLS];
-        Bullet bullet; // TODO: should this be an array?
+        Bullet bullets[MAX_BULLETS];
         i32 alienRows;
         i32 alienCols;
         f32 spacing;
