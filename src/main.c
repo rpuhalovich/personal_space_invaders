@@ -1,7 +1,7 @@
 #include "game.h"
 #include "raylib.h"
 
-int main(void) {
+i32 main(void) {
     init();
     while (!WindowShouldClose()) {
         BeginDrawing();

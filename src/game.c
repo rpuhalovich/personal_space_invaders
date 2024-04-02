@@ -60,8 +60,8 @@ void init(void) {
         Texture texture = LoadTextureFromImage(img);
         UnloadImage(img);
 
-        for (int r = 0; r < ALIEN_ROWS; r++) {
-            for (int c = 0; c < ALIEN_COLS; c++) {
+        for (i32 r = 0; r < ALIEN_ROWS; r++) {
+            for (i32 c = 0; c < ALIEN_COLS; c++) {
                 Vector2 pos = {(state.aliens.spacing + texture.width) * c, (state.aliens.spacing + texture.height) * r};
                 pos.x += state.window.margin;
                 pos.y += state.window.margin + 10.f;
@@ -108,8 +108,8 @@ void update(void) {
             DrawTextureEx(state.ship.texture, Vector2Scale(state.ship.pos, state.window.scaleFactor), 0, state.window.scaleFactor, WHITE);
 
             // draw aliens
-            for (int r = 0; r < ALIEN_ROWS; r++) {
-                for (int c = 0; c < ALIEN_COLS; c++) {
+            for (i32 r = 0; r < ALIEN_ROWS; r++) {
+                for (i32 c = 0; c < ALIEN_COLS; c++) {
                     if (state.aliens.alienGrid[r][c].isDed) continue;
                     Vector2 alienPos = Vector2Scale(state.aliens.alienGrid[r][c].pos, state.window.scaleFactor);
                     DrawTextureEx(state.aliens.alienGrid[r][c].texture, alienPos, 0, state.window.scaleFactor, WHITE);
@@ -124,7 +124,7 @@ void update(void) {
             }
 
             // draw ship lives
-            for (int i = 0; i < state.ship.lives; i++) {
+            for (i32 i = 0; i < state.ship.lives; i++) {
                 Vector2 pos = {state.window.margin + (state.ship.texture.width + state.window.margin) * i, state.window.margin};
                 DrawTextureEx(state.ship.texture, Vector2Scale(pos, state.window.scaleFactor), 0, state.window.scaleFactor, WHITE);
             }
