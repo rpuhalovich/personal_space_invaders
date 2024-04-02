@@ -3,7 +3,7 @@
 #include "logic.h"
 #include "game.h"
 
-void printv2(Vector2 v) {
+void pri32v2(Vector2 v) {
     printf("x: %f, y: %f\n", v.x, v.y);
 }
 
@@ -11,6 +11,7 @@ f32 clampf(f32 val, f32 mn, f32 mx) {
     return fmax(mn, fmin(val, mx));
 }
 
+// TODO: this shouldn't be a function
 void calcShipPosition(State* s, f32 frameTime, bool isLeft, f32 minPos, f32 maxPos) {
     f32 m = s->ship.speed * frameTime;
     Vector2 resPos = s->ship.pos;
@@ -32,8 +33,8 @@ void tick(State* state, f32 time, f32 frameTime) {
         state->ship.bullet.start.y -= m;
         state->ship.bullet.end.y -= m;
 
-        for (int r = 0; r < ALIEN_ROWS; r++) {
-            for (int c = 0; c < ALIEN_COLS; c++) {
+        for (i32 r = 0; r < ALIEN_ROWS; r++) {
+            for (i32 c = 0; c < ALIEN_COLS; c++) {
                 Alien a = state->aliens.alienGrid[r][c];
                 if (a.isDed) continue;
                 Rectangle rec = { .x = a.pos.x, .y = a.pos.y, .width = a.texture.width, .height = a.texture.height };
@@ -50,8 +51,8 @@ void tick(State* state, f32 time, f32 frameTime) {
     if (!state->aliens.isPaused) {
         i32 dir = state->aliens.isLeft ? -1 : 1;
         f32 offset = dir * abs(state->aliens.speed) * GetFrameTime();
-        for (int r = 0; r < ALIEN_ROWS; r++) {
-            for (int c = 0; c < ALIEN_COLS; c++) {
+        for (i32 r = 0; r < ALIEN_ROWS; r++) {
+            for (i32 c = 0; c < ALIEN_COLS; c++) {
                 state->aliens.alienGrid[r][c].pos.x += offset;
             }
         }
@@ -60,8 +61,8 @@ void tick(State* state, f32 time, f32 frameTime) {
         f32 rmargin = state->window.width - state->window.margin;
 
         bool moveDown = false;
-        for (int r = 0; r < ALIEN_ROWS; r++) {
-            for (int c = 0; c < ALIEN_COLS; c++) {
+        for (i32 r = 0; r < ALIEN_ROWS; r++) {
+            for (i32 c = 0; c < ALIEN_COLS; c++) {
                 Alien a = state->aliens.alienGrid[r][c];
                 f32 textureWidth = state->aliens.alienGrid[r][c].texture.width;
                 if (a.pos.x < lmargin || (a.pos.x + textureWidth) > rmargin && !a.isDed) {
@@ -72,8 +73,8 @@ void tick(State* state, f32 time, f32 frameTime) {
         }
 
         if (moveDown) {
-            for (int r = 0; r < ALIEN_ROWS; r++) {
-                for (int c = 0; c < ALIEN_COLS; c++) {
+            for (i32 r = 0; r < ALIEN_ROWS; r++) {
+                for (i32 c = 0; c < ALIEN_COLS; c++) {
                     state->aliens.alienGrid[r][c].pos.y += state->aliens.alienGrid[r][c].texture.height;
                     f32 x = state->aliens.alienGrid[r][c].pos.x;
                     state->aliens.alienGrid[r][c].pos.x = clampf(x, lmargin + 1.f, rmargin - 1.f);

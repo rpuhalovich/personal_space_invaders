@@ -83,6 +83,8 @@ void update(void) {
 #ifdef PSI_DEBUG
         if (IsKeyPressed(KEY_P)) state.aliens.isPaused = !state.aliens.isPaused;
         if (IsKeyPressed(KEY_M)) state.gameMode = state.gameMode == GAME ? MENU : GAME;
+        if (IsKeyPressed(KEY_RIGHT_BRACKET)) state.ship.lives = MIN(5, state.ship.lives + 1);
+        if (IsKeyPressed(KEY_LEFT_BRACKET)) state.ship.lives = MAX(0, state.ship.lives - 1);
 #endif
     }
 

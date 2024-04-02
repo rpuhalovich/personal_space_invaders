@@ -14,4 +14,7 @@
 #define f32 float
 #define f64 double
 
+#define MAX(x, y) (((x) > (y)) ? (x) : (y))
+#define MIN(x, y) (((x) < (y)) ? (x) : (y))
+
 #endif // TYPES_H
