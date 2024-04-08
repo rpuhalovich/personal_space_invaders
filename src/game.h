@@ -4,12 +4,14 @@
 #include <raylib.h>
 #include <raymath.h>
 
+#include "barrier.h"
 #include "types.h"
 
 #define ALIEN_ROWS 5
 #define ALIEN_COLS 11
-#define MAX_BULLETS 3
+#define NUM_ALIEN_BULLETS 3
 #define SCALE_FACTOR 3
+#define BARRIERS 4
 
 typedef enum {
     MENU = 0,
@@ -55,7 +57,11 @@ typedef struct {
     } ship;
     struct {
         Alien alienGrid[ALIEN_ROWS][ALIEN_COLS];
-        Bullet bullets[MAX_BULLETS];
+
+        Bullet bullets[NUM_ALIEN_BULLETS];
+        u64 lastShotTime;
+        u64 shootTime;
+
         i32 alienRows;
         i32 alienCols;
         f32 spacing;
@@ -67,6 +73,9 @@ typedef struct {
         f32 lastMoveTime;
         f32 moveInterval;
     } aliens;
+    struct {
+        Barrier barriers[BARRIERS];
+    } barriers;
 } State;
 
 // sets up the game state, resources and window
