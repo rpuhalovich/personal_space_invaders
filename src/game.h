@@ -18,6 +18,11 @@ typedef enum {
     GAME,
 } GameMode;
 
+typedef enum {
+    RIGHT = 0,
+    LEFT,
+} Direction;
+
 typedef struct {
     Texture texture;
     Vector2 pos;
@@ -35,6 +40,8 @@ typedef struct {
 
 typedef struct {
     GameMode gameMode;
+    Texture shipTexture;
+    Texture alienTexture;
     i32 time;
     i32 score;
     struct {
@@ -58,9 +65,11 @@ typedef struct {
     struct {
         Alien alienGrid[ALIEN_ROWS][ALIEN_COLS];
 
+        Direction direction;
+
         Bullet bullets[NUM_ALIEN_BULLETS];
         u64 lastShotTime;
-        u64 shootTime;
+        f32 shootTime;
 
         i32 alienRows;
         i32 alienCols;
@@ -77,6 +86,8 @@ typedef struct {
         Barrier barriers[BARRIERS];
     } barriers;
 } State;
+
+void resetState(void);
 
 // sets up the game state, resources and window
 void init(void);

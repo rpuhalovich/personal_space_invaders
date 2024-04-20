@@ -5,11 +5,10 @@
 
 State state = {0};
 
-void init(void) {
-    randInit();
-
+// TODO: finish
+void resetState(void) {
     State s = {
-        .gameMode = GAME,
+        .gameMode = MENU,
         .score = 0,
         .time = 0,
 
@@ -39,7 +38,68 @@ void init(void) {
         .aliens.speed = 20.f,
         .aliens.lastMoveTime = 0.f,
         .aliens.moveInterval = 20.f,
-        .aliens.shootTime = 2.f,
+        .aliens.shootTime = 3.f,
+    };
+
+    state = s;
+
+    // ship
+    {
+        Vector2 pos = {state.window.margin, state.window.height - (state.shipTexture.height + state.window.margin)};
+        state.ship.pos = pos;
+        s.window.deathFloor = pos.y + 10.f;
+    }
+
+    // aliens
+    {
+        for (i32 r = 0; r < ALIEN_ROWS; r++) {
+            for (i32 c = 0; c < ALIEN_COLS; c++) {
+                Vector2 pos = {(state.aliens.spacing + state.alienTexture.width) * c, (state.aliens.spacing + state.alienTexture.width) * r};
+                pos.x += state.window.margin;
+                pos.y += state.window.margin + 10.f;
+                Alien a = {state.alienTexture, pos};
+                state.aliens.alienGrid[r][c] = a;
+            }
+        }
+    }
+}
+
+void init(void) {
+    randInit();
+
+    State s = {
+        .gameMode = MENU,
+        .score = 0,
+        .time = 0,
+
+        .window.fontSize = 10.f,
+        .window.width = 224,
+        .window.height = 256,
+        .window.margin = 5.f,
+        .window.scaleFactor = SCALE_FACTOR,
+        .window.targetFps = 60,
+
+        .ship.speed = 100.f,
+        .ship.lives = 5,
+        .ship.bullet.end = {0},
+        .ship.bullet.height = 10.f,
+        .ship.bullet.isFired = false,
+        .ship.bullet.speed = 300.f,
+        .ship.bullet.start = {0},
+        .ship.bullet.width = 1.f,
+
+        .aliens.direction = RIGHT,
+        .aliens.alienGrid = {0},
+        .aliens.alienCols = ALIEN_COLS,
+        .aliens.alienRows = ALIEN_ROWS,
+        .aliens.isLeft = false,
+        .aliens.isPaused = false,
+        .aliens.killScore = 100,
+        .aliens.spacing = 5.f,
+        .aliens.speed = 20.f,
+        .aliens.lastMoveTime = 0.f,
+        .aliens.moveInterval = 20.f,
+        .aliens.shootTime = 3.f,
     };
 
     state = s;
@@ -160,6 +220,10 @@ void update(void) {
         // handle input
         if (IsKeyPressed(KEY_M)) {
             // TODO: reset game state
+
+            init();
+            // cleanup();
+
             state.gameMode = GAME;
         }
 
@@ -170,12 +234,24 @@ void update(void) {
         {
             ClearBackground(BLACK);
             i32 sf = state.window.scaleFactor;
-            const char* todoText = "TODO: Implement";
-            f32 fontSize = 10.f;
-            f32 textWidth = MeasureText(todoText, fontSize);
-            f32 x = (state.window.width / 2 - textWidth / 2) * sf;
-            f32 y = (state.window.height / 2 - fontSize / 2) * sf;
-            DrawText(todoText, x, y, fontSize * sf, WHITE);
+            f32 textSpacing = 10.f;
+
+            // title
+            const char* title = "(PERSONAL) SPACE INVADERS";
+            f32 titleFontSize = 10.f;
+            Vector2 titlePos = {(state.window.width / 2.f - (f32)MeasureText(title, titleFontSize) / 2.f), 64.f};
+            DrawText(title, titlePos.x * sf, titlePos.y * sf, titleFontSize * sf, WHITE);
+
+            // options
+            const char* playText = "PLAY";
+            f32 playFontSize = 5.f;
+            Vector2 playPos = {(state.window.width / 2.f - (f32)MeasureText(playText, playFontSize) / 2.f), titlePos.y + titleFontSize + textSpacing};
+            DrawText(playText, playPos.x * sf, playPos.y * sf, playFontSize * sf, WHITE);
+
+            const char* controlsText = "CONTROLS";
+            f32 controlsFontSize = 5.f;
+            Vector2 controlPos = {(state.window.width / 2.f - (f32)MeasureText(controlsText, controlsFontSize) / 2.f), playPos.y + playFontSize + textSpacing};
+            DrawText(controlsText, controlPos.x * sf, controlPos.y * sf, controlsFontSize * sf, WHITE);
         }
     }
 }
