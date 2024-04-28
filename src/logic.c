@@ -92,52 +92,39 @@ void tickGame(State* state, f32 time, f32 frameTime) {
         }
 
         // movement
-        i32 dir = state->aliens.isLeft ? -1 : 1;
-        f32 offset = dir * abs(state->aliens.speed) * GetFrameTime();
-        for (i32 r = 0; r < ALIEN_ROWS; r++) {
-            for (i32 c = 0; c < ALIEN_COLS; c++) {
-                state->aliens.alienGrid[r][c].pos.x += offset;
-            }
-        }
-
-        f32 lmargin = state->window.margin;
-        f32 rmargin = state->window.width - state->window.margin;
-
-        bool moveDown = false;
-        for (i32 r = 0; r < ALIEN_ROWS; r++) {
-            for (i32 c = 0; c < ALIEN_COLS; c++) {
-                Alien a = state->aliens.alienGrid[r][c];
-                f32 textureWidth = state->aliens.alienGrid[r][c].texture.width;
-                if (a.pos.x < lmargin || (a.pos.x + textureWidth) > rmargin && !a.isDed) {
-                    state->aliens.isLeft = !state->aliens.isLeft;
-                    moveDown = true;
-                }
-            }
-        }
-
-        if (moveDown) {
+        {
+            i32 dir = state->aliens.isLeft ? -1 : 1;
+            f32 offset = dir * abs(state->aliens.speed) * GetFrameTime();
             for (i32 r = 0; r < ALIEN_ROWS; r++) {
                 for (i32 c = 0; c < ALIEN_COLS; c++) {
-                    state->aliens.alienGrid[r][c].pos.y += state->aliens.alienGrid[r][c].texture.height;
+                    state->aliens.alienGrid[r][c].pos.x += offset;
                 }
             }
 
-            // this is for the situation where the aliens will not move inside the boundries
-            // enough for this to not be triggered next frame
-            // TODO: this is dumb, have an enum that just says the direction and calculate based off that
-            // TODO: make enum for direction of the aliens after one movement cycle
-            if (state->aliens.alienGrid[0][0].pos.x < lmargin) {
-                // remove this and just have state.aliens.direction = RIGHT
-                for (i32 r = 0; r < ALIEN_ROWS; r++) {
-                    for (i32 c = 0; c < ALIEN_COLS; c++) {
-                        state->aliens.alienGrid[r][c].pos.x = lmargin + 1.f + (state->aliens.alienGrid[r][c].texture.width + state->aliens.spacing) * c;
+            f32 lmargin = state->window.margin;
+            f32 rmargin = state->window.width - state->window.margin;
+
+            bool moveDown = false;
+            for (i32 r = 0; r < ALIEN_ROWS; r++) {
+                for (i32 c = 0; c < ALIEN_COLS; c++) {
+                    Alien a = state->aliens.alienGrid[r][c];
+                    f32 textureWidth = state->aliens.alienGrid[r][c].texture.width;
+                    if (a.pos.x < lmargin) {
+                        state->aliens.isLeft = false;
+                        moveDown = true;
+                    }
+
+                    if ((a.pos.x + textureWidth) > rmargin && !a.isDed) {
+                        state->aliens.isLeft = true;
+                        moveDown = true;
                     }
                 }
-            } else if (state->aliens.alienGrid[ALIEN_ROWS - 1][ALIEN_COLS - 1].pos.x > rmargin) {
+            }
+
+            if (moveDown) {
                 for (i32 r = 0; r < ALIEN_ROWS; r++) {
                     for (i32 c = 0; c < ALIEN_COLS; c++) {
-                        // HACK: this is a hack cbf calcing it properly
-                        state->aliens.alienGrid[r][c].pos.x -= 2.f;
+                        state->aliens.alienGrid[r][c].pos.y += state->aliens.alienGrid[r][c].texture.height;
                     }
                 }
             }

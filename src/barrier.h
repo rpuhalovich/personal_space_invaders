@@ -19,12 +19,6 @@ typedef struct {
 #define BARRIER_ROWS 3
 #define BARRIER_COLS 4
 
-// BarrierBlock defaultBarrierBlocks[BARRIER_ROWS][BARRIER_COLS] = {
-//     {0, 0, 0, 0},
-//     {0, 0, 0, 0},
-//     {0, 0, 0, 0},
-// };
-
 typedef struct {
     BarrierBlock barrierBlocks[BARRIER_ROWS][BARRIER_COLS];
 } Barrier;

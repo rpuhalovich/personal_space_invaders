@@ -68,7 +68,7 @@ void init(void) {
     randInit();
 
     State s = {
-        .gameMode = MENU,
+        .gameMode = GAME,
         .score = 0,
         .time = 0,
 
